@@ -14,6 +14,9 @@
         <img src="{{ asset('/images/vaccine-1dose.png') }}" class="w-6 pr-1" /> 
         COVID-19 Vaccine Registration
       </h2>
+      <p class="mb-5 text-center">
+        <span class="text-yellow-600">Already Registered? Check status</span> <a href="{{ route('search') }}" class="text-blue-500" target="_blank">here.</a>
+      </p>
 
       <form action="{{ route('complete-registration') }}" method="POST">
         @csrf
