@@ -12,4 +12,12 @@ class VaccineSchedule extends Model
     protected $fillable = [
         'user_id', 'vaccine_center_id', 'schedule_date', 'email_sent', 'sms_sent'
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function vaccineCenter() {
+        return $this->belongsTo(VaccineCenter::class);
+    }
 }
