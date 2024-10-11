@@ -12,3 +12,11 @@ Why `datalist` rather than beautiful `select2` or any other items?
 For faster development and faster render on weak devices.
 
 ####
+SMS Notification
+
+1. Create a Custom SMS Channel, i.e. `MyChannel`.
+2. Modify `construct` and `send` method according to SMS gateway's documentation.
+3. Call the custom channel from `via` method inside `NotifyVaccineTaker` notification and call the method `toMyChannel`'s custom method'.
+4. Declare custom Method in `User` Model `routeNotificationForMyChannel`.
+
+
