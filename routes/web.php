@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VaccineRegistrationController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,5 +19,9 @@ Route::get('/registration', [VaccineRegistrationController::class, 'registration
 
 Route::post('/registration', [VaccineRegistrationController::class, 'completeRegistration'])->name('complete-registration');
 Route::get('/success', [VaccineRegistrationController::class, 'success'])->name('registration.success');
+
+Route::get('/search', [SearchController::class, 'search'])->name('search');
+Route::get('/get-status-by-nid', [SearchController::class, 'getStatusByNid'])->name('getStatusByNid');
+
 
 // Route::resource('registrations', []);
