@@ -8,11 +8,7 @@ Why `area` field in `users` table are string rather than `area_id` from `areas` 
 
 Same reason for `city` and `area` in `vaccine_centers` table.
 
-Why `datalist` rather than beautiful `select2` or any other items?
-For faster development and faster render on weak devices.
-
-####
-SMS Notification
+#### SMS Notification
 
 1. Create a Custom SMS Channel, i.e. `MyChannel`.
 2. Modify `construct` and `send` method according to SMS gateway's documentation.
