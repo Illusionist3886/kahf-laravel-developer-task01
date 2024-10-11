@@ -9,6 +9,9 @@ class VaccineCenter extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'city', 'area', 'name', 'capacity', 'available_quantity', 'is_active'
+    ];
     protected static function boot()
     {
         parent::boot();
