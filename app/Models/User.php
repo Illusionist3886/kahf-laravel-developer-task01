@@ -17,11 +17,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $fillable = ['name', 'nid', 'phone', 'email', 'vaccine_center_id', 'password'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -42,6 +38,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
 
     public function vaccineSchedule() {
         return $this->hasOne(VaccineSchedule::class);

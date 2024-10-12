@@ -26,18 +26,13 @@ class VaccineRegistrationController extends Controller
 
     public function completeRegistration(VaccineRegistrationRequest $request) {
         
-        $user = new User();
+        $userInfo = $request->only('name', 'nid', 'phone', 'email', 'vaccine_center_id', 'password');
 
-        $user->name = $request->name;
-        $user->nid = $request->nid;
-        $user->phone = $request->phone;
-        $user->email = $request->email;
-        $user->vaccine_center_id = $request->vaccine_center_id;
-        $user->password = bcrypt($request->password);
+        $user = User::create($userInfo);
 
-        $user->save();
-
-        ProcessVaccineRegistration::dispatch($user);
+        if ($user) {
+            ProcessVaccineRegistration::dispatch($user);
+        }
 
         return redirect()->route('registration.success')
                      ->with('success', 'Registration successful. We will notify when your vaccine is scheduled.');
