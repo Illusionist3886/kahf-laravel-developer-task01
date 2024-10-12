@@ -38,6 +38,11 @@ class UpdateVaccineCenterSchedule implements ShouldQueue
             ])->take($limit)->get();
 
             DB::transaction(function() use($users, $vaccineCenter) {
+
+                // As all the applicant took the vaccine on time.
+
+                User::where('vaccine_status', 'Scheduled')->whereDate('scheduled_date', now()->format('Y-m-d'))->update(['vaccine_status' => 'Vaccinated']);
+
                 $users->each(function ($user) use($vaccineCenter) {
                     $user->scheduled_date = now();
                     $user->vaccine_status = 'Scheduled';

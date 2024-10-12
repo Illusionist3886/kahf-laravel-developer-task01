@@ -21,7 +21,12 @@ class ProcessNotifyVaccineTaker implements ShouldQueue
      */
     public function __construct()
     {
-        $this->vaccineSchedules = VaccineSchedule::with('vaccineCenter')->where('email_sent', 0)->get();
+        $this->vaccineSchedules = VaccineSchedule::with('vaccineCenter')
+                                  ->where([
+                                    'email_sent' => 0,
+                                    'schedule_date' => date('Y-m-d', strtotime('+1 day'))
+                                    ])
+                                  ->get();
     }
 
     /**
@@ -31,12 +36,13 @@ class ProcessNotifyVaccineTaker implements ShouldQueue
     {
         foreach($this->vaccineSchedules as $schedule) {
             $user = $schedule->user;
+            info($user);
             if($user) {
                 try {
                     $user->notify(new NotifyVaccineTaker($schedule, $user->email));
                     $schedule->update(['email_sent' => 1]);
                 } catch (\Throwable $th) {
-                    // For Future
+                    // For Future Error Logging. Notify Dev Team via Slack/Discord or any custom api.
                 }
             }
         }
