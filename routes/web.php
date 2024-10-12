@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function() {
+    return view('welcome');
+})->name('welcome');
+
 Route::get('/registration', [VaccineRegistrationController::class, 'registration'])->name('registration');
 
 Route::post('/registration', [VaccineRegistrationController::class, 'completeRegistration'])->name('complete-registration');
