@@ -23,10 +23,10 @@ class VaccineRegistrationRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'nid' => 'required|string|unique:users,nid|max:20',
+            'nid' => 'required|string|unique:users,nid|min:10|max:13',
             'email' => 'required|email:rfc,dns|unique:users,email',
             'vaccine_center_id' => 'required|exists:vaccine_centers,id',
-            'phone' => 'nullable|string|unique:users,phone|max:15',
+            'phone' => 'nullable|string|unique:users,phone|max:14',
             'password' => 'required|string|min:8|confirmed'
         ];
     }

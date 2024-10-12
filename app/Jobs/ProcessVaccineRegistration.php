@@ -50,11 +50,36 @@ class ProcessVaccineRegistration implements ShouldQueue
                 ]);
             }
 
-            if (Cache::has("user_status_{$user->nid}")) {
-                Cache::forget("user_status_{$user->nid}");
+            $lock = Cache::lock('user_vaccine_status', 60); 
+
+            $userWithSchedule = collect([
+                'id' => $user->id,
+                'nid' => $user->nid,
+                'vaccine_status' => $user->vaccine_status,
+                'vaccine_schedule' => ($vaccineCenter && $vaccineCenter->available_quantity > 0) ? ['schedule_date' => $user->vaccineSchedule->schedule_date] : null
+            ]);
+
+            if ($lock->get()) {
+                try {
+                    $cachedUsers = Cache::get('user_vaccine_status', []);
+
+                    $cachedUsers = ($cachedUsers instanceof \Illuminate\Support\Collection) ? $cachedUsers : collect([]);
+                    $cachedUsers->push($userWithSchedule);
+
+                    Cache::put('user_vaccine_status', $cachedUsers, 3600 * 18); // Update cache for 18 hours
+                } finally {
+                    $lock->release();
+                }
+            } else {
+                $cachedUsers = Cache::get('user_vaccine_status', []);
+
+                $cachedUsers = ($cachedUsers instanceof \Illuminate\Support\Collection) ? $cachedUsers : collect([]);
+                $cachedUsers->push($userWithSchedule);
+
+                Cache::put('user_vaccine_status', $cachedUsers, 3600 * 18); // Update cache for 18 hours
             }
             
-            Cache::put("user_status_{$user->nid}", $user, 3600 * 6 ); // Cache for 6 hours
+
         });
         
     }

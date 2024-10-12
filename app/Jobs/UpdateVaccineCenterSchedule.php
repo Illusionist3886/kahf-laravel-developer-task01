@@ -55,12 +55,7 @@ class UpdateVaccineCenterSchedule implements ShouldQueue
                         'vaccine_center_id' => $vaccineCenter->id,
                         'schedule_date'     => today()->addDay()->format('Y-m-d')
                     ]);
-
-                    if (Cache::has("user_status_{$user->nid}")) {
-                        Cache::forget("user_status_{$user->nid}");
-                    }
-                    
-                    Cache::put("user_status_{$user->nid}", $user, 3600 * 6 ); // Cache for 6 hours
+                   
                 });
     
                 $vaccineCenter->update([

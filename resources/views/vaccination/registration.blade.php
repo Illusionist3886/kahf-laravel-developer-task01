@@ -51,7 +51,7 @@
           @error('nid')
             <span class="text-red-500 text-sm mb-1 block">{{ $message }}</span>
           @enderror
-          <input type="text" id="nid" name="nid" value="{{ old('nid') }}" placeholder="Enter your NID number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          <input type="text" id="nid" name="nid" maxlength="13" value="{{ old('nid') }}" placeholder="Enter your NID number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
         </div>
         
 
@@ -61,7 +61,7 @@
           @error('phone')
             <span class="text-red-500 text-sm mb-1 block">{{ $message }}</span>
           @enderror
-          <input type="text" id="phone" name="phone" value="{{ old('phone') }}" placeholder="Enter your phone number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <input type="text" id="phone" name="phone" minlength="10" maxlength="14" value="{{ old('phone') }}" placeholder="Enter your phone number" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
         <!-- Email Address -->

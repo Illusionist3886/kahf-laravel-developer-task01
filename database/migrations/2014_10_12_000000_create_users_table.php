@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('nid')->unique();
+            $table->string('nid', 13)->unique();
             $table->string('email')->unique();
-            $table->string('phone')->unique()->nullable()->comment('Future SMS Feature');
+            $table->string('phone', 14)->unique()->nullable()->comment('Future SMS Feature');
             $table->foreignId('vaccine_center_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

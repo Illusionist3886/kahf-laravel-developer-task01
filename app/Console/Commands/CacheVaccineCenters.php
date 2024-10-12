@@ -20,7 +20,7 @@ class CacheVaccineCenters extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Cache Vaccine Centers.';
 
     /**
      * Execute the console command.
