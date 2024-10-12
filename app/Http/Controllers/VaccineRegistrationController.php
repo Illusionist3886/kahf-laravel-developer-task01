@@ -12,7 +12,7 @@ use App\Models\VaccineSchedule;
 class VaccineRegistrationController extends Controller
 {
     public function registration() {
-        $vaccineCenters = VaccineCenter::all();
+        $vaccineCenters = VaccineCenter::select('id', 'name')->get();
 
         return view('vaccination.registration', compact('vaccineCenters'));
     }
@@ -30,7 +30,7 @@ class VaccineRegistrationController extends Controller
 
         $user->save();
 
-        $checkAvailability = VaccineCenter::find($user->vaccine_center_id);
+        $checkAvailability = VaccineCenter::select('id', 'available_quantity')->find($user->vaccine_center_id);
 
         if($checkAvailability && $checkAvailability->available_quantity > 0) {
             $user->scheduled_date = now();

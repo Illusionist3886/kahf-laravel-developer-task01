@@ -9,7 +9,7 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
   <div>
-    <div class="w-full md:w-1/2 p-3 rounded-md bg-green-400">
+    <div class="w-full p-3 rounded-md bg-green-400">
       {{ session('success') }}
     </div>
     <div>

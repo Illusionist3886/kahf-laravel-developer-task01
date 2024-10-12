@@ -26,8 +26,8 @@ class VaccineRegistrationRequest extends FormRequest
             'nid' => 'required|string|unique:users,nid|max:20',
             'email' => 'required|email:rfc,dns|unique:users,email',
             'vaccine_center_id' => 'required|exists:vaccine_centers,id',
-            'phone' => 'required|string|unique:users,phone|max:15',
-            'password' => 'required|string|min:8|confirmed',
+            'phone' => 'nullable|string|unique:users,phone|max:15',
+            'password' => 'required|string|min:8|confirmed'
         ];
     }
 

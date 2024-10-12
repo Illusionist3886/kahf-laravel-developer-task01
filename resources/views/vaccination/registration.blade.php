@@ -37,9 +37,9 @@
           @enderror
   
           <select id="vaccineCenters" name="vaccine_center_id" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-            <option  disabled selected>Select Vaccine Center</option>
+            <option value="" disabled {{ old('vaccine_center_id') ? '' : 'selected' }}>Select Vaccine Center</option>
             @foreach($vaccineCenters as $vaccineCenter)
-              <option value="{{ $vaccineCenter->id }}">{{ $vaccineCenter->name }}</option>
+              <option value="{{ $vaccineCenter->id }}" {{ old('vaccine_center_id') == $vaccineCenter->id ? 'selected' : '' }}>{{ $vaccineCenter->name }}</option>
             @endforeach
           </select>
 
