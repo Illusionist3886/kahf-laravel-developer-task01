@@ -8,8 +8,13 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-  <h2 class="w-full md:w-1/2 p-3 rounded-md bg-green-400">
-    {{ session('success') }}
-  </h2>
+  <div>
+    <div class="w-full md:w-1/2 p-3 rounded-md bg-green-400">
+      {{ session('success') }}
+    </div>
+    <div>
+    <a href="{{ route('search') }}" class="my-4 inline-block text-blue-600">Click Here</a> to Check Status.
+    </div>
+  </div>
 </body>
 </html>

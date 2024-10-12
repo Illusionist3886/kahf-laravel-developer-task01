@@ -74,11 +74,11 @@
               const result = await response.json();
 
               if (result.vaccine_status == 'Not Scheduled') {
-                  userVaccinationStatus.innerHTML = `<p class="text-yellow-500">Status: Registered but not scheduled for vaccine yet</p>`;
+                  userVaccinationStatus.innerHTML = `<p class="text-yellow-500">Status: Registered but not scheduled for vaccine yet.</p>`;
               } else if (result.vaccine_status == 'Scheduled') {
-                  userVaccinationStatus.innerHTML = `<p class="text-green-500">Status: Scheduled for vaccination on ${result.vaccine_schedule?.schedule_date}</p>`;
+                  userVaccinationStatus.innerHTML = `<p class="text-green-500">Status: Scheduled for vaccination on ${result.vaccine_schedule?.schedule_date}.</p>`;
               } else if (result.vaccine_status === 'Vaccinated') {
-                  userVaccinationStatus.innerHTML = `<p class="text-green-500">Status: ✔️ Vaccinated</p>`;
+                  userVaccinationStatus.innerHTML = `<p class="text-green-500">Status: ✔️ Vaccinated.</p>`;
               }
             }
               
