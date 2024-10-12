@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Carbon\Carbon;
 
 class ProcessVaccineRegistration implements ShouldQueue
 {
@@ -35,14 +36,26 @@ class ProcessVaccineRegistration implements ShouldQueue
             $vaccineCenter = VaccineCenter::select('id', 'available_quantity')->find($user->vaccine_center_id);
     
             if($vaccineCenter && $vaccineCenter->available_quantity > 0) {
+
+                $currentDateTime = now();
+
+                if ($currentDateTime->format('H') >= 18) {
+                    // Add one day if it's after 6:00 PM
+                    $currentDateTime->addDay();
+                }
+
+                if ($currentDateTime->isFriday() || $currentDateTime->isSaturday()) {
+                    $currentDateTime = Carbon::parse('next sunday');
+                }
+
                 $user->scheduled_at = now();
-                $user->scheduled_date = now()->format('Y-m-d');
+                $user->scheduled_date = $currentDateTime->format('Y-m-d');
                 $user->vaccine_status = 'Scheduled';
                 $user->save(); 
     
                 $user->vaccineSchedule()->create([
                     'vaccine_center_id' => $user->vaccine_center_id,
-                    'schedule_date'     => now()->format('Y-m-d')
+                    'schedule_date'     => $currentDateTime->format('Y-m-d')
                 ]);
     
                 $vaccineCenter->update([

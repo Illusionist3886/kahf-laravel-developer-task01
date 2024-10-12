@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\User;
 use App\Models\VaccineCenter;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
@@ -33,6 +34,18 @@ class UpdateVaccineCenterSchedule implements ShouldQueue
 
         User::where('vaccine_status', 'Scheduled')->whereDate('scheduled_date', now()->format('Y-m-d'))->update(['vaccine_status' => 'Vaccinated']);
 
+        $currentDateTime = now();
+
+        if ($currentDateTime->format('H') >= 18) {
+            // Add one day if it's after 6:00 PM
+            $currentDateTime->addDay();
+        }
+
+        if ($currentDateTime->isFriday() || $currentDateTime->isSaturday()) {
+            $currentDateTime = Carbon::parse('next sunday');
+        }
+
+
         foreach($this->vaccineCenters as $vaccineCenter) {
             $limit = $vaccineCenter->capacity;
 
@@ -41,19 +54,19 @@ class UpdateVaccineCenterSchedule implements ShouldQueue
                 'vaccine_status' => 'Not Scheduled'
             ])->take($limit)->get();
 
-            DB::transaction(function() use($users, $vaccineCenter) {
+            DB::transaction(function() use($users, $vaccineCenter, $currentDateTime) {
 
                 // As all the applicant took the vaccine on time.
 
-                $users->each(function ($user) use($vaccineCenter) {
-                    $user->scheduled_date = today()->addDay()->format('Y-m-d');
+                $users->each(function ($user) use($vaccineCenter, $currentDateTime) {
+                    $user->scheduled_date = $currentDateTime->format('Y-m-d');
                     $user->scheduled_at = now();
                     $user->vaccine_status = 'Scheduled';
                     $user->save(); 
                     
                     $user->vaccineSchedule()->create([
                         'vaccine_center_id' => $vaccineCenter->id,
-                        'schedule_date'     => today()->addDay()->format('Y-m-d')
+                        'schedule_date'     => $currentDateTime->format('Y-m-d')
                     ]);
                    
                 });
