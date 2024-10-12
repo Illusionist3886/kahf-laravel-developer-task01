@@ -15,10 +15,17 @@ Choose Database **sqlite** for easy exploration.
 ```
 cp .env.example .env
 php artisan key:generate
+```
+
+Then for database and seeding.
+```
+php artisan migrate
+php artisan db:seed
 php artisan serve
 ```
 
-To Process the Laravel Jobs via Schedule
+To Process the Laravel Jobs via Schedule run below command in project directory in another terminal tab/window.
+
 ```
 php artisan schedule:work
 ```
