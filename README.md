@@ -9,14 +9,10 @@
 git clone https://github.com/Illusionist3886/kahf-laravel-devloper-task01
 cd kahf-laravel-devloper-task01
 composer install
-```
-
-Choose Database **sqlite** for easy exploration.
-```
 cp .env.example .env
 php artisan key:generate
 ```
-
+Choose Database **sqlite** for easy exploration.
 Then for database and seeding.
 ```
 php artisan migrate
