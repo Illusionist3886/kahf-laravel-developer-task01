@@ -9,6 +9,7 @@ use App\Models\VaccineCenter;
 use App\Models\VaccineSchedule;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\VaccineRegistrationRequest;
+use App\Jobs\ProcessVaccineRegistration;
 
 class VaccineRegistrationController extends Controller
 {
@@ -36,25 +37,10 @@ class VaccineRegistrationController extends Controller
 
         $user->save();
 
-        $checkAvailability = VaccineCenter::select('id', 'available_quantity')->find($user->vaccine_center_id);
+        ProcessVaccineRegistration::dispatch($user);
 
-        if($checkAvailability && $checkAvailability->available_quantity > 0) {
-            $user->scheduled_date = now();
-            $user->vaccine_status = 'Scheduled';
-            $user->save(); 
-
-            $user->vaccineSchedule()->create([
-                'vaccine_center_id' => $request->vaccine_center_id,
-                'schedule_date'     => now()->format('Y-m-d')
-            ]);
-
-            $checkAvailability->update([
-                'available_quantity' => --$checkAvailability->available_quantity
-            ]);
-        }
-
-        return redirect()->route('registration.success') // Replace with your route
-                     ->with('success', 'Registration successful. We will notify when your vaccine is scheduled.'); // Pass success message
+        return redirect()->route('registration.success')
+                     ->with('success', 'Registration successful. We will notify when your vaccine is scheduled.');
     }
 
     public function success() {
