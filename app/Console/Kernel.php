@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('cache-vaccine-centers')->everySixHours(); // Caching Vaccine Centers
         $schedule->job(new UpdateVaccineCenterSchedule)->weeklyOn(1,2,3,4,7, '18:05'); // Runs on Monday, Tuesday, Wednesday, Thursday and Sunday.
         $schedule->job(new ProcessNotifyVaccineTaker)->weeklyOn(1,2,3,6,7, '21:00'); // Runs on Monday, Tuesday, Wednesday, Staurday and Sunday.
     }
