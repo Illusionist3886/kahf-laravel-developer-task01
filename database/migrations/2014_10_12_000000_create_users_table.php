@@ -23,7 +23,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->dateTime('registration_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->dateTime('scheduled_date')->nullable();
+            $table->dateTime('scheduled_at')->nullable();
+            $table->date('scheduled_date')->nullable();
             $table->enum('vaccine_status', ['Not Scheduled', 'Scheduled', 'Vaccinated'])->default('Not Scheduled');
             $table->rememberToken();
             $table->timestamps();

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\VaccineCenter;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,10 +32,11 @@ class ProcessVaccineRegistration implements ShouldQueue
     {
         DB::transaction(function() {
             $user = $this->user;
-            $checkAvailability = VaccineCenter::select('id', 'available_quantity')->find($user->vaccine_center_id);
+            $vaccineCenter = VaccineCenter::select('id', 'available_quantity')->find($user->vaccine_center_id);
     
-            if($checkAvailability && $checkAvailability->available_quantity > 0) {
-                $user->scheduled_date = now();
+            if($vaccineCenter && $vaccineCenter->available_quantity > 0) {
+                $user->scheduled_at = now();
+                $user->scheduled_date = now()->format('Y-m-d');
                 $user->vaccine_status = 'Scheduled';
                 $user->save(); 
     
@@ -43,10 +45,16 @@ class ProcessVaccineRegistration implements ShouldQueue
                     'schedule_date'     => now()->format('Y-m-d')
                 ]);
     
-                $checkAvailability->update([
-                    'available_quantity' => --$checkAvailability->available_quantity
+                $vaccineCenter->update([
+                    'available_quantity' => --$vaccineCenter->available_quantity
                 ]);
             }
+
+            if (Cache::has("user_status_{$user->nid}")) {
+                Cache::forget("user_status_{$user->nid}");
+            }
+            
+            Cache::put("user_status_{$user->nid}", $user, 3600 * 6 ); // Cache for 6 hours
         });
         
     }

@@ -5,11 +5,12 @@ namespace App\Jobs;
 use App\Models\User;
 use App\Models\VaccineCenter;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\DB;
 
 class UpdateVaccineCenterSchedule implements ShouldQueue
 {
@@ -29,6 +30,9 @@ class UpdateVaccineCenterSchedule implements ShouldQueue
      */
     public function handle(): void
     {
+
+        User::where('vaccine_status', 'Scheduled')->whereDate('scheduled_date', now()->format('Y-m-d'))->update(['vaccine_status' => 'Vaccinated']);
+
         foreach($this->vaccineCenters as $vaccineCenter) {
             $limit = $vaccineCenter->capacity;
 
@@ -41,17 +45,22 @@ class UpdateVaccineCenterSchedule implements ShouldQueue
 
                 // As all the applicant took the vaccine on time.
 
-                User::where('vaccine_status', 'Scheduled')->whereDate('scheduled_date', now()->format('Y-m-d'))->update(['vaccine_status' => 'Vaccinated']);
-
                 $users->each(function ($user) use($vaccineCenter) {
-                    $user->scheduled_date = now();
+                    $user->scheduled_date = today()->addDay()->format('Y-m-d');
+                    $user->scheduled_at = now();
                     $user->vaccine_status = 'Scheduled';
                     $user->save(); 
                     
                     $user->vaccineSchedule()->create([
                         'vaccine_center_id' => $vaccineCenter->id,
-                        'schedule_date'     => now()->format('Y-m-d')
+                        'schedule_date'     => today()->addDay()->format('Y-m-d')
                     ]);
+
+                    if (Cache::has("user_status_{$user->nid}")) {
+                        Cache::forget("user_status_{$user->nid}");
+                    }
+                    
+                    Cache::put("user_status_{$user->nid}", $user, 3600 * 6 ); // Cache for 6 hours
                 });
     
                 $vaccineCenter->update([
