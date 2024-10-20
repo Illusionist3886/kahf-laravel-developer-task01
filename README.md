@@ -4,7 +4,11 @@
 [DB Diagram](https://drawsql.app/teams/abu-barakah-delowar/diagrams/kahf-laravel-developer)
 
 
-####
+#### Requirements
+1. PHP Version: ***^8.1***
+2. PHP Extension: ***sqlite***
+
+## Steps to Run
 ```
 git clone https://github.com/Illusionist3886/kahf-laravel-developer-task01
 cd kahf-laravel-developer-task01
