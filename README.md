@@ -6,8 +6,8 @@
 
 ####
 ```
-git clone https://github.com/Illusionist3886/kahf-laravel-devloper-task01
-cd kahf-laravel-devloper-task01
+git clone https://github.com/Illusionist3886/kahf-laravel-developer-task01
+cd kahf-laravel-developer-task01
 composer install
 cp .env.example .env
 php artisan key:generate
